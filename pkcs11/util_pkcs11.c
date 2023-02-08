@@ -643,26 +643,8 @@ static uint16_t read_meta_item(uint8_t *value, cka_meta_item *meta_item) {
   return meta_item->len + 2;
 }
 
-/*
- * Meta object value structure:
- * byte 0-3 : META_OBJECT_VERSION (always present)
- * byte 4: Original object type (always present)
- * byte 5 and 6: Original object ID (always present)
- * byte 7: original object sequence
- * byte 8 and onward: TLV tripplets
- */
-static CK_RV read_meta_object(yubihsm_pkcs11_slot *slot, uint16_t opaque_id,
-                              pkcs11_meta_object *meta_object) {
-
-  uint8_t opaque_value[YH_MSG_BUF_SIZE] = {0};
-  size_t opaque_value_len = sizeof(opaque_value);
-  yh_rc yrc = yh_util_get_opaque(slot->device_session, opaque_id, opaque_value,
-                                 &opaque_value_len);
-  if (yrc != YHR_SUCCESS) {
-    DBG_ERR("Failed to read meta object 0x%x from device", opaque_id);
-    return yrc_to_rv(yrc);
-  }
-
+CK_RV parse_meta_object(uint8_t *opaque_value, uint16_t opaque_value_len,
+                        pkcs11_meta_object *meta_object) {
   // 4 (version) + 1 (object type) + 2 (id) + 1 (sequence)
   if (opaque_value_len < 8) {
     DBG_ERR("Opaque value to import is too small to be a meta obeject data");
@@ -708,6 +690,30 @@ static CK_RV read_meta_object(yubihsm_pkcs11_slot *slot, uint16_t opaque_id,
     p += len;
   }
   return CKR_OK;
+}
+
+/*
+ * Meta object value structure:
+ * byte 0-3 : META_OBJECT_VERSION (always present)
+ * byte 4: Original object type (always present)
+ * byte 5 and 6: Original object ID (always present)
+ * byte 7: original object sequence
+ * byte 8 and onward: TLV tripplets
+ */
+static CK_RV read_meta_object(yubihsm_pkcs11_slot *slot, uint16_t opaque_id,
+                              pkcs11_meta_object *meta_object) {
+
+  uint8_t opaque_value[YH_MSG_BUF_SIZE] = {0};
+  size_t opaque_value_len = sizeof(opaque_value);
+  yh_rc yrc = yh_util_get_opaque(slot->device_session, opaque_id, opaque_value,
+                                 &opaque_value_len);
+  if (yrc != YHR_SUCCESS) {
+    DBG_ERR("Failed to read meta object 0x%x from device", opaque_id);
+    return yrc_to_rv(yrc);
+  }
+
+  CK_RV rv = parse_meta_object(opaque_value, opaque_value_len, meta_object);
+  return rv;
 }
 
 yubihsm_pkcs11_object_desc *_get_object_desc(yubihsm_pkcs11_slot *slot,

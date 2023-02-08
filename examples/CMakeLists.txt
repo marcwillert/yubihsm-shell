@@ -152,6 +152,15 @@ set(
   encrypt_aes.c
 )
 
+set(
+  SOURCE_PARSE_META_OBJECT
+  parse_meta_object.c
+  ../pkcs11/util_pkcs11.c
+  ../pkcs11/debug_p11.c
+  ../pkcs11/list.c
+  ../common/util.c
+)
+
 include_directories (
   ${LIBCRYPTO_INCLUDEDIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/../lib
@@ -346,6 +355,14 @@ add_executable(encrypt_aes ${SOURCE_ENCRYPT_AES})
 target_link_libraries(
   encrypt_aes
   yubihsm
+)
+
+add_executable(parse_meta_object ${SOURCE_PARSE_META_OBJECT})
+
+target_link_libraries(
+        parse_meta_object
+        yubihsm_pkcs11
+        yubihsm
 )
 
 if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Windows")
