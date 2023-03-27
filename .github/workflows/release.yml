@@ -34,7 +34,7 @@ jobs:
   Windowsx86:
     name: Build Windows x86 release
     needs: source
-    runs-on: windows-latest
+    runs-on: windows-2019
     env:
       VERSION: 2.4.0
     steps:
@@ -79,7 +79,7 @@ jobs:
   windowsx64:
     name: Build Windows x64 release
     needs: source
-    runs-on: windows-latest
+    runs-on: windows-2019
     env:
       VERSION: 2.4.0
     steps:
