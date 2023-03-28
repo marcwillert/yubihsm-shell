@@ -52,10 +52,7 @@ jobs:
         run: |
           Set-PSDebug -Trace 1
           $YHSHELL_SRC_DIR="$env:GITHUB_WORKSPACE\yubihsm-shell-$env:VERSION"
-
-          Get-Childitem –Path C:\ -Include Microsoft_VC*_CRT*.msm -Recurse -ErrorAction SilentlyContinue
-          
-          $MERGEDPATH = Get-ChildItem "C:\Program Files\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC\14.*\MergeModules\Microsoft_VC141_CRT_x86.msm"
+          $MERGEDPATH = Get-ChildItem "C:\Program Files (x86)\Common Files\Merge Modules\Microsoft_VC140_CRT_x86.msm"
 
           cd $YHSHELL_SRC_DIR/resources/release/win
           ./make_release_binaries.ps1 Win32 C:/vcpkg
@@ -100,10 +97,7 @@ jobs:
         run: |
           Set-PSDebug -Trace 1
           $YHSHELL_SRC_DIR="$env:GITHUB_WORKSPACE\yubihsm-shell-$env:VERSION"
-
-          Get-Childitem –Path C:\ -Include Microsoft_VC*_CRT*.msm -Recurse -ErrorAction SilentlyContinue
-
-          $MERGEDPATH = Get-ChildItem "C:\Program Files\Microsoft Visual Studio\2019\Enterprise\VC\Redist\MSVC\14.*\MergeModules\Microsoft_VC141_CRT_x86.msm"
+          $MERGEDPATH = Get-ChildItem "C:\Program Files (x86)\Common Files\Merge Modules\Microsoft_VC140_CRT_x64.msm"
 
           cd $YHSHELL_SRC_DIR/resources/release/win
           ./make_release_binaries.ps1 x64 C:/vcpkg
