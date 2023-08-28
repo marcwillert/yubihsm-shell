@@ -2402,7 +2402,7 @@ CK_DEFINE_FUNCTION(CK_RV, C_FindObjectsInit)
             session->operation.op.find.only_private = true;
             rc =
               yh_string_to_capabilities("decrypt-pkcs,decrypt-oaep,derive-ecdh,"
-                                        "unwrap-data",
+                                        "unwrap-data,decrypt-ecb,decrypt-cbc",
                                         &capabilities);
             if (rc != YHR_SUCCESS) {
               rv = yrc_to_rv(rc);
@@ -2413,8 +2413,9 @@ CK_DEFINE_FUNCTION(CK_RV, C_FindObjectsInit)
 
         case CKA_ENCRYPT:
           if (*((CK_BBOOL *) pTemplate[i].pValue) == CK_TRUE) {
-            type = YH_WRAP_KEY;
-            rc = yh_string_to_capabilities("wrap-data", &capabilities);
+            // type = YH_WRAP_KEY;
+            rc = yh_string_to_capabilities("wrap-data,encrypt-ecb,encrypt-cbc",
+                                           &capabilities);
             if (rc != YHR_SUCCESS) {
               rv = yrc_to_rv(rc);
               goto c_foi_out;
@@ -2501,7 +2502,8 @@ CK_DEFINE_FUNCTION(CK_RV, C_FindObjectsInit)
         goto c_foi_out;
       }
       for (size_t i = 0; i < tmp_n_objects; i++) {
-        DBG_ERR("Checking object 0x%x in tmp_objects", tmp_objects[i].id);
+        DBG_ERR("Checking object 0x%x of type %d in tmp_objects",
+                tmp_objects[i].id, tmp_objects[i].type);
         if (tmp_objects[i].type == YH_WRAP_KEY ||
             tmp_objects[i].type == YH_HMAC_KEY ||
             tmp_objects[i].type == YH_SYMMETRIC_KEY) {
