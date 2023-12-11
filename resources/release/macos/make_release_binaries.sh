@@ -38,20 +38,14 @@ cp -r $BREW_LIB/openssl/include/openssl "$OUTPUT/include"
 
 install_name_tool -id "@loader_path/../lib/libcrypto.3.dylib" "$OUTPUT/lib/libcrypto.3.dylib"
 
-#install_name_tool -change "$BREW_LIB/openssl@3/lib/libcrypto.3.dylib" "@loader_path/../lib/libcrypto.3.dylib" "$OUTPUT/lib/libyubihsm.dylib"
 install_name_tool -change "$BREW_LIB/openssl@3/lib/libcrypto.3.dylib" "@loader_path/../lib/libcrypto.3.dylib" "$OUTPUT/lib/libyubihsm.$VERSION.dylib"
-#install_name_tool -change "$BREW_LIB/openssl@3/lib/libcrypto.3.dylib" "@loader_path/../lib/libcrypto.3.dylib" "$OUTPUT/lib/libyubihsm.$SO_VERSION.dylib"
 
-#install_name_tool -change "$BREW_LIB/libusb/lib/libusb-1.0.0.dylib"  "@loader_path/../lib/libusb-1.0.0.dylib" "$OUTPUT/lib/libyubihsm_usb.dylib"
 install_name_tool -change "$BREW_LIB/libusb/lib/libusb-1.0.0.dylib"  "@loader_path/../lib/libusb-1.0.0.dylib" "$OUTPUT/lib/libyubihsm_usb.$VERSION.dylib"
-#install_name_tool -change "$BREW_LIB/libusb/lib/libusb-1.0.0.dylib"  "@loader_path/../lib/libusb-1.0.0.dylib" "$OUTPUT/lib/libyubihsm_usb.$SO_VERSION.dylib"
 
 install_name_tool -change "$BREW_LIB/openssl@3/lib/libcrypto.3.dylib" "@loader_path/../lib/libcrypto.3.dylib" "$OUTPUT/lib/pkcs11/yubihsm_pkcs11.dylib"
 install_name_tool -rpath "$OUTPUT/lib" "@loader_path/../lib" "$OUTPUT/lib/pkcs11/yubihsm_pkcs11.dylib"
 
-#install_name_tool -rpath "$OUTPUT/lib" "@loader_path/../lib" "$OUTPUT/lib/libykhsmauth.dylib"
 install_name_tool -rpath "$OUTPUT/lib" "@loader_path/../lib" "$OUTPUT/lib/libykhsmauth.$VERSION.dylib"
-#install_name_tool -rpath "$OUTPUT/lib" "@loader_path/../lib" "$OUTPUT/lib/libykhsmauth.$SO_VERSION.dylib"
 
 install_name_tool -change "$BREW_LIB/openssl@3/lib/libcrypto.3.dylib" "@loader_path/../lib/libcrypto.3.dylib" "$OUTPUT/bin/yubihsm-shell"
 install_name_tool -change "$BREW_LIB/openssl@3/lib/libcrypto.3.dylib" "@loader_path/../lib/libcrypto.3.dylib" "$OUTPUT/bin/yubihsm-wrap"
